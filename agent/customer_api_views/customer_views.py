@@ -9,6 +9,15 @@ class CustomerListCreateAPIView(ListCreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
 
+
 class UserListCreateAPIView(ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user = User.objects.first()
+        return User.objects.all()
+
+# class UserGroupsListCreateAPIView(ListCreateAPIView):
+#     queryset = .objects.all()
+#     serializer_class = UserGroupsSerializer

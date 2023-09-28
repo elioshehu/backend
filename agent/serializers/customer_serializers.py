@@ -15,10 +15,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email', 'username', 'password']
 
-class UserGroupsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model =
-        fields = ['user_id', 'group_id']
+# class UserGroupsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model =
+#         fields = ['user_id', 'group_id']
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:

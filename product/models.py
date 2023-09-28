@@ -21,4 +21,4 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
 
     name = models.CharField(max_length=50)
-    product = models.ManyToManyField(Product)
+    product = models.ManyToManyField(Product, related_name='categories')
