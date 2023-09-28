@@ -18,6 +18,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
 class OrderUnit(models.Model):
     class Meta:
         db_table = 'itw_order_unit'
@@ -28,6 +29,7 @@ class OrderUnit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.IntegerField()
     price = models.IntegerField()
+
 
 class Counter(models.Model):
     class Meta:
