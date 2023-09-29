@@ -15,8 +15,8 @@ class Order(models.Model):
     code = models.IntegerField()
     code_year = models.IntegerField()
     date_registered = models.DateField()
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
 
 
 class OrderUnit(models.Model):
@@ -25,8 +25,8 @@ class OrderUnit(models.Model):
         verbose_name = 'unit'
         verbose_name_plural = 'units'
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='units')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='units')
     amount = models.IntegerField()
     price = models.IntegerField()
 
