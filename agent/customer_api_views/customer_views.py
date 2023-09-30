@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User, Group
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from agent.models import Customer
-from agent.serializers.customer_serializers import CustomerSerializer, UserSerializer, GroupSerializer
+from agent.serializers.customer_serializers import CustomerSerializer, UserSerializer, GroupSerializer, \
+    MyTokenObtainPairSerializer
 
 
 class CustomerListCreateAPIView(ListCreateAPIView):
@@ -41,6 +43,11 @@ class GroupListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
     lookup_field = 'id'
 
+
 # class UserGroupsListCreateAPIView(ListCreateAPIView):
 #     queryset = User.groups.all()
 #     serializer_class = UserGroupsSerializer
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer

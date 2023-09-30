@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
 
 from agent.models import Customer
 
@@ -26,3 +27,12 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['id', 'name']
+
+
+class MyTokenObtainPairSerializer(TokenObtainSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['name'] = user.name
+        token['user_id'] = user.id
+        return token

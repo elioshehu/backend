@@ -6,6 +6,7 @@ from order.order_api_views.order_views import OrderListCreateAPIView, OrderUnitL
 
 urlpatterns = [
     path('orders/', OrderListCreateAPIView.as_view(), name='orders'),
+    path('orders/', OrderListCreateAPIView.as_view(), name='orders'),
     path('ordersUpdate/<int:id>', OrderListUpdateDestroyAPIView.as_view(), name='ordersUD'),
     path('orderUnits/', OrderUnitListCreateAPIView.as_view(), name='orderUnits'),
     path('orderUnitsUpdate/<int:id>', OrderUnitListUpdateDestroyAPIView.as_view(), name='orderUnitsUD'),
