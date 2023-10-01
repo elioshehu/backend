@@ -27,8 +27,8 @@ class OrderUnit(models.Model):
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='units')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='units')
-    amount = models.IntegerField()
-    price = models.IntegerField()
+    amount = models.IntegerField(default=0)
+    price = models.IntegerField(default=0)
 
 
 class Counter(models.Model):
