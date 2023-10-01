@@ -8,10 +8,10 @@ class Product(models.Model):
         verbose_name = 'product'
         verbose_name_plural = 'products'
 
-    name = models.CharField(max_length=50)
-    default_price = models.FloatField(default=10)
-    description = models.CharField(max_length=50)
-    deleted = models.BooleanField(default=False)
+    name = models.CharField(max_length=50, null=True)
+    default_price = models.FloatField(default=10, null=True)
+    description = models.CharField(max_length=50, null=True)
+    deleted = models.BooleanField(default=False, null=True)
 
 
 class Category(models.Model):
@@ -20,5 +20,5 @@ class Category(models.Model):
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, null=True)
     product = models.ManyToManyField(Product, related_name='categories')

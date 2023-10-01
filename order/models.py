@@ -30,6 +30,11 @@ class OrderUnit(models.Model):
     amount = models.IntegerField(default=0)
     price = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        self.price = self.amount * self.product.default_price
+        super().save(*args, **kwargs)
+
+
 
 class Counter(models.Model):
     class Meta:
