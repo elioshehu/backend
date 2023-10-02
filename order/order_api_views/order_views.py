@@ -1,4 +1,5 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
 
 from order.models import Order, OrderUnit, Counter
@@ -8,6 +9,14 @@ from order.serializers.order_serializers import OrderSerializer, OrderUnitSerial
 class OrderListCreateAPIView(ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class OrderListAPIView(ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('customer__first_name', 'creator__username')
+    order_fields = ('date_registered')
 
 
 class OrderListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -22,6 +31,7 @@ class MyCustomPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_staff:
             return True
+
 
 class OrderUnitListCreateAPIView(ListCreateAPIView):
     permission_classes = [IsAdminUser]

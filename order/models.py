@@ -35,7 +35,6 @@ class OrderUnit(models.Model):
         super().save(*args, **kwargs)
 
 
-
 class Counter(models.Model):
     class Meta:
         db_table = 'itw_counter'

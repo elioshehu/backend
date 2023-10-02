@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from agent.models import Customer
 
@@ -32,6 +33,12 @@ class GroupSerializer(serializers.ModelSerializer):
 class MyTokenObtainPairSerializer(TokenObtainSerializer):
     @classmethod
     def get_token(cls, user):
-        token = super().get_token(user)
-        token['name'] = user.username
-        return token
+        return RefreshToken.for_user(user)
+
+    def validate(self, attrs):
+        data = super(MyTokenObtainPairSerializer, self).validate(attrs)
+        token = self.get_token(self.user)
+        data['access'] = str(token.access_token)
+        data['refresh'] = str(token)
+        data['username'] = self.user.username
+        return data
