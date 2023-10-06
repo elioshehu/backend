@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User, Group
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, UpdateAPIView, \
+    RetrieveUpdateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from agent.models import Customer
 from agent.serializers.customer_serializers import CustomerSerializer, UserSerializer, GroupSerializer, \
-    MyTokenObtainPairSerializer
+    MyTokenObtainPairSerializer, UserReadSerializer, ShitesSerializer, ShitesUpdateSerializer
 
 
 class CustomerListCreateAPIView(ListCreateAPIView):
@@ -22,15 +23,17 @@ class UserListCreateAPIView(ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def get_queryset(self):
-        user = User.objects.first()
-        return User.objects.all()
-
 
 class UserListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.all().prefetch_related('groups')
     serializer_class = UserSerializer
     lookup_field = 'id'
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return UserReadSerializer
+        else:
+            return self.serializer_class
 
 
 class GroupListCreateAPIView(ListCreateAPIView):
@@ -51,3 +54,14 @@ class GroupListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+class ShitesListAPIView(ListAPIView):
+    queryset = User.objects.filter(groups__name__in=['Shites'])
+    serializer_class = ShitesSerializer
+
+
+class ShitesUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = User.objects.filter(groups__name__in=['Shites'])
+    serializer_class = ShitesUpdateSerializer
+    lookup_field = 'id'
