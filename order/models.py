@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -12,9 +14,9 @@ class Order(models.Model):
         verbose_name = 'order'
         verbose_name_plural = 'orders'
 
-    code = models.IntegerField()
-    code_year = models.IntegerField()
-    date_registered = models.DateField()
+    code = models.IntegerField(null=True, blank=True)
+    code_year = models.IntegerField(default=datetime.date.today().year)
+    date_registered = models.DateField(default=datetime.date.today())
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
 

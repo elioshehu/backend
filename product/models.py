@@ -13,6 +13,9 @@ class Product(models.Model):
     description = models.CharField(max_length=50, null=True)
     deleted = models.BooleanField(default=False, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     class Meta:
