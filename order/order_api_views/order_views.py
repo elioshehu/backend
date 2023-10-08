@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
 
 from order.models import Order, OrderUnit, Counter
 from order.serializers.order_serializers import OrderSerializer, OrderUnitSerializer, CounterSerializer, \
-    OrderReadSerializer, OrderUpdateSerializer, OrderUnitReadSerializer
+    OrderReadSerializer, OrderUnitReadSerializer
 
 
 class OrderListCreateAPIView(ListCreateAPIView):
@@ -28,8 +28,8 @@ class OrderListCreateAPIView(ListCreateAPIView):
 
 
 class OrderListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderUpdateSerializer
+    queryset = Order.objects.all().prefetch_related('units')
+    serializer_class = OrderSerializer
     lookup_field = 'id'
 
     def get_serializer_class(self):

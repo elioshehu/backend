@@ -14,7 +14,7 @@ class Order(models.Model):
         verbose_name = 'order'
         verbose_name_plural = 'orders'
 
-    code = models.IntegerField(null=True, blank=True)
+    code = models.CharField(max_length=15, null=True, blank=True)
     code_year = models.IntegerField(default=datetime.date.today().year)
     date_registered = models.DateField(default=datetime.date.today())
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
@@ -45,3 +45,9 @@ class Counter(models.Model):
 
     name = models.CharField(max_length=10)
     value = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+    def get_value(self):
+        return self.value

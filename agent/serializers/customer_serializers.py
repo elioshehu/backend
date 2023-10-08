@@ -23,7 +23,7 @@ class UserReadSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     # my_groups = serializers.SerializerMethodField(read_only=False)
-    # groups = GroupSerializer(many=True)
+    # groups = GroupSerializer(many=True, read_only=False)
 
     class Meta:
         model = User
