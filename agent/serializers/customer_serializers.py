@@ -29,18 +29,18 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'username', 'password', 'groups']
 
-        def update(self, instance, validated_data):
-            data = validated_data.copy()
-            groups = data.pop('groups', [])
-            for key, val in data.items():
-                setattr(instance, key, val)
-            instance.save()
-
-            group_ids = [g['id'] for g in groups]
-            instance.groups.clear()
-            for g in group_ids:
-                instance.groups.add(g)
-            return instance
+        # def update(self, instance, validated_data):
+        #     data = validated_data.copy()
+        #     groups = data.pop('groups', [])
+        #     for key, val in data.items():
+        #         setattr(instance, key, val)
+        #     instance.save()
+        #
+        #     group_ids = [g['id'] for g in groups]
+        #     instance.groups.clear()
+        #     for g in group_ids:
+        #         instance.groups.add(g)
+        #     return instance
 
         def create(self, validated_data):
             data = validated_data.copy()
