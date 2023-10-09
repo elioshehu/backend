@@ -10,6 +10,8 @@ class CounterSerializer(serializers.ModelSerializer):
 
 
 class OrderUnitSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = OrderUnit
         fields = ['id', 'product', 'amount']
@@ -30,30 +32,32 @@ class OrderReadSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    # units = OrderUnitSerializer(many=True)
+    units = OrderUnitSerializer(many=True)
+
     # counter = serializers.SerializerMethodField(read_only=False)
 
     class Meta:
         model = Order
         fields = ['customer', 'creator', 'units']
 
-    # def update(self, instance, validated_data):
-    #     print('Running order')
-    #     data = validated_data.copy()
-    #     units = data.pop('units', [])
-    #     for key, val in data.items():
-    #         setattr(instance, key, val)
-    #     instance.save()
-    #
-    #     print(units)
-    #     print(units[0])
-    #
-    #     unit_ids = [u['id'] for u in units]
-    #     print(unit_ids)
-    #     instance.units.clear()
-    #     for u in unit_ids:
-    #         instance.units.add(u)
-    #     return instance
+    def update(self, instance, validated_data):
+        data = validated_data.copy()
+        units = data.pop('units')
+        for key, val in data.items():
+            setattr(instance, key, val)
+        instance.save()
+
+        for unit in units:
+            if unit.get('id', 0) > 0:
+                new_unit = OrderUnit.objects.get(id=unit['id'])
+                new_unit.product = unit['product']
+                new_unit.amount = unit['amount']
+                new_unit.save()
+            else:
+                unit['id'] = 0
+                unit.pop('id')
+                OrderUnit.objects.create(order=instance, **unit)
+        return instance
 
     def create(self, validated_data):
         units_data = validated_data.pop('units')
@@ -69,7 +73,8 @@ class OrderSerializer(serializers.ModelSerializer):
         counter.value += 1
         counter.save()
         for unit in units_data:
-            OrderUnit.objects.create(order=order, **unit)
+            unit_to_add = unit.pop('id')
+            OrderUnit.objects.create(order=order, **unit_to_add)
         return order
 
     # def set_code(self, counter):
