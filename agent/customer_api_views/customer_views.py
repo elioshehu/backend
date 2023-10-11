@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, UpdateAPIView, \
     RetrieveUpdateAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from agent.models import Customer
@@ -16,7 +17,7 @@ class CustomerListCreateAPIView(ListCreateAPIView):
 class CustomerListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    lookup_field = 'id'
+    # lookup_field = 'id'
 
 
 class UserListCreateAPIView(ListCreateAPIView):
@@ -36,15 +37,15 @@ class UserListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
             return self.serializer_class
 
 
-class GroupListCreateAPIView(ListCreateAPIView):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-
-
-class GroupListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    lookup_field = 'id'
+# class GroupListCreateAPIView(ListCreateAPIView):
+#     queryset = Group.objects.all()
+#     serializer_class = GroupSerializer
+#
+#
+# class GroupListUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+#     queryset = Group.objects.all()
+#     serializer_class = GroupSerializer
+#     lookup_field = 'id'
 
 
 # class UserGroupsListCreateAPIView(ListCreateAPIView):
@@ -56,12 +57,14 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-class ShitesListAPIView(ListAPIView):
+class ShitesListCreateAPIView(ListCreateAPIView):
+    permission_classes = [IsAdminUser]
     queryset = User.objects.filter(groups__name__in=['Shites'])
     serializer_class = ShitesSerializer
 
 
 class ShitesUpdateAPIView(RetrieveUpdateAPIView):
+    permission_classes = [IsAdminUser]
     queryset = User.objects.filter(groups__name__in=['Shites'])
     serializer_class = ShitesUpdateSerializer
     lookup_field = 'id'

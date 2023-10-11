@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework.fields import ListField
 from rest_framework_simplejwt.serializers import TokenObtainSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -23,11 +24,13 @@ class UserReadSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     # my_groups = serializers.SerializerMethodField(read_only=False)
-    # groups = GroupSerializer(many=True, read_only=False)
+    groups_name = GroupSerializer(source='groups', many=True, read_only=True)
+
+    # groups = serializers.ListSerializer(child=serializers.IntegerField())
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'username', 'password', 'groups']
+        fields = ['id', 'username', 'email', 'username', 'password', 'groups', 'groups_name']
 
         # def update(self, instance, validated_data):
         #     data = validated_data.copy()
@@ -42,13 +45,13 @@ class UserSerializer(serializers.ModelSerializer):
         #         instance.groups.add(g)
         #     return instance
 
-        def create(self, validated_data):
-            data = validated_data.copy()
-            groups = validated_data.pop('groups', [])
-            instance = self.Meta.model.objects.create(**data)
-            for group in groups:
-                instance.groups.add(group)
-            return instance
+        # def create(self, validated_data):
+        #     data = validated_data.copy()
+        #     groups = validated_data.pop('groups', [])
+        #     instance = self.Meta.model.objects.create(**data)
+        #     for group in groups:
+        #         instance.groups.add(group)
+        #     return instance
 
     # def to_representation(self, instance):
     #     data = super(UserSerializer, self).to_representation(instance)
@@ -73,17 +76,26 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class ShitesSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True)
+    # groups = GroupSerializer(many=True)
+    groups_name = GroupSerializer(source='groups', many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'username', 'email', 'password', 'groups_name']
+
+    def create(self, validated_data):
+        instance = self.Meta.model.objects.create(**validated_data)
+        g = Group.objects.get(name='Shites')
+        instance.groups.add(g)
+        return instance
 
 
 class ShitesUpdateSerializer(serializers.ModelSerializer):
+    groups_name = GroupSerializer(source='groups', many=True, read_only=True)
+
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'username', 'email', 'password', 'groups_name']
 
 
 class MyTokenObtainPairSerializer(TokenObtainSerializer):
