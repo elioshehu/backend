@@ -81,7 +81,7 @@ class ShitesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'groups_name']
+        fields = ['id', 'username', 'email', 'password', 'is_active', 'groups_name']
 
     def create(self, validated_data):
         instance = self.Meta.model.objects.create(**validated_data)
@@ -95,7 +95,7 @@ class ShitesUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'groups_name']
+        fields = ['id', 'username', 'email', 'password', 'is_active', 'groups_name']
 
 
 class MyTokenObtainPairSerializer(TokenObtainSerializer):

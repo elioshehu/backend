@@ -10,7 +10,7 @@ class Product(models.Model):
 
     name = models.CharField(max_length=50, null=True)
     default_price = models.FloatField(default=10, null=True)
-    description = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=50, null=True, blank=True)
     deleted = models.BooleanField(default=False, null=True)
 
     def __str__(self):
