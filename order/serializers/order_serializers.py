@@ -34,7 +34,7 @@ class OrderUnitReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderUnit
-        fields = ['order', 'product', 'amount', 'price', 'name']
+        fields = ['id', 'product', 'amount', 'price', 'name']
 
     def get_name(self, obj):
         return obj.product.name
@@ -42,12 +42,20 @@ class OrderUnitReadSerializer(serializers.ModelSerializer):
 
 class OrderReadSerializer(serializers.ModelSerializer):
     units = OrderUnitSerializer(many=True)
+    customer = serializers.SerializerMethodField('get_customer_name')
+    creator = serializers.SerializerMethodField('get_creator_name')
 
     # products_name = ProductReadSerializer(source='units', many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = ['customer', 'creator', 'date_registered', 'units']
+        fields = ['id', 'customer', 'creator', 'date_registered', 'units']
+
+    def get_customer_name(self, obj):
+        return obj.customer.first_name
+
+    def get_creator_name(self, obj):
+        return obj.creator.username
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -58,7 +66,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['customer', 'creator', 'units']
+        fields = ['id', 'customer', 'creator', 'units']
 
     def update(self, instance, validated_data):
         data = validated_data.copy()

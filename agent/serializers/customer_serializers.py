@@ -107,6 +107,6 @@ class MyTokenObtainPairSerializer(TokenObtainSerializer):
         data = super(MyTokenObtainPairSerializer, self).validate(attrs)
         token = self.get_token(self.user)
         data['access'] = str(token.access_token)
-        data['refresh'] = str(token)
+        data['refreshToken'] = str(token)
         data['username'] = self.user.username
         return data
