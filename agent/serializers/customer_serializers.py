@@ -66,7 +66,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'first_name', 'last_name', 'company_name', 'deleted']
+        fields = ['id', 'first_name', 'last_name', 'company_name']
 
 
 # class UserGroupsSerializer(serializers.ModelSerializer):
@@ -109,4 +109,5 @@ class MyTokenObtainPairSerializer(TokenObtainSerializer):
         data['access'] = str(token.access_token)
         data['refreshToken'] = str(token)
         data['username'] = self.user.username
+        data['id'] = self.user.id
         return data

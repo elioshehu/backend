@@ -66,7 +66,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'creator', 'units']
+        fields = ['id', 'customer', 'date_registered', 'creator', 'units']
 
     def update(self, instance, validated_data):
         data = validated_data.copy()
@@ -103,9 +103,9 @@ class OrderSerializer(serializers.ModelSerializer):
         counter.save()
         for unit in units_data:
             # unit_to_add = unit.pop('id')
-            if unit.get('price', 0) == 0:
-                product = unit['product']
-                unit['price'] = product.default_price
+            # if unit.get('price', 0) == 0:
+            #     product = unit['product']
+            #     unit['price'] = product.default_price
             OrderUnit.objects.create(**unit, order_id=order.pk)
         return order
 
