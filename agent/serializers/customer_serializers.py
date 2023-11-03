@@ -85,10 +85,13 @@ class ShitesSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = self.Meta.model.objects.create(**validated_data)
+        instance.set_password(validated_data['password'])
+        instance.save()
         g = Group.objects.get(name='Shites')
         instance.groups.add(g)
         return instance
 
+from django.contrib.auth.hashers import make_password
 
 class ShitesUpdateSerializer(serializers.ModelSerializer):
     groups_name = GroupSerializer(source='groups', many=True, read_only=True)
@@ -96,6 +99,12 @@ class ShitesUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'is_active', 'groups_name']
+
+    def update(self, instance, validated_data):
+        instance.password = make_password(validated_data.get('password'))
+        instance.save()
+        return instance
+
 
 
 class MyTokenObtainPairSerializer(TokenObtainSerializer):
